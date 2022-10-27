@@ -1,23 +1,17 @@
 {
   "name": "nextjs-sandbox-2022",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "format": "prettier --write \"app/**/*.{ts,tsx}\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/takefumi-yoshii/nextjs-sandbox-2022.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/takefumi-yoshii/nextjs-sandbox-2022/issues"
-  },
-  "homepage": "https://github.com/takefumi-yoshii/nextjs-sandbox-2022#readme",
   "dependencies": {
     "eslint-config-next": "^13.0.0",
     "next": "^13.0.0",
@@ -25,8 +19,16 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@types/jest": "^29.2.0",
     "@types/node": "18.11.5",
     "@types/react": "18.0.23",
-    "msw": "^0.47.4"
+    "jest": "^29.2.2",
+    "jest-environment-jsdom": "^29.2.2",
+    "jest-html-reporters": "^3.0.11",
+    "msw": "^0.47.4",
+    "prettier": "^2.7.1",
+    "whatwg-fetch": "^3.6.2"
   }
 }

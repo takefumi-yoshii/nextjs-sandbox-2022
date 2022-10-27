@@ -1,17 +1,14 @@
 import Link from "next/link";
-import { getData } from "./.api";
+import { getData } from "./.api/getData";
+import "./.api/msw";
 
 export default async function Page() {
   const data = await getData();
   return (
     <div>
-      <h1>Hello, Next.js!{data.message}</h1>
+      <h1>Hello, Next.js!</h1>
+      <p>{data.message}</p>
       <Link href="/test">down</Link>
     </div>
   );
-}
-
-if (process.env.MOCKING_ENABLED === "true") {
-  const { server, handlers } = require("./.api/mock");
-  server.use(...handlers);
 }
