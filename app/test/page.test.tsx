@@ -1,12 +1,12 @@
-import { setupMockServer, renderSegment } from "@/mock/jest";
+import { renderSegment, setupMockServer } from "@/mock/jest";
 import { screen } from "@testing-library/react";
 import { mockGetMessage } from "./.api/getMessage/mock";
 import { mockGetTime } from "./.api/getTime/mock";
 import Error from "./error";
 import Layout from "./layout";
-import Page from "./page";
 import Loading from "./loading";
 import NotFound from "./not-found";
+import Page from "./page";
 
 const server = setupMockServer(mockGetMessage(), mockGetTime());
 

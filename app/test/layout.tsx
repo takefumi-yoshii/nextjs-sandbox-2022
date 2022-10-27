@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ReactNode } from "react";
-import styles from "./styles.module.css";
 import { getTime } from "./.api/getTime";
 import "./.api/msw";
+import styles from "./styles.module.css";
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const data = await getTime();

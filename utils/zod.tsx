@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { z, ZodError, ZodSchema } from "zod";
+import { notFound } from "next/dist/client/components/not-found";
 
 export function validate<T extends ZodSchema>(
   target: unknown,
@@ -20,7 +21,10 @@ export function withZod<T extends ZodSchema>(
   next: (props: z.infer<T>) => Promise<ReactElement>
 ) {
   return async function Page(props: unknown) {
-    validate(props, schema);
+    const parsed = schema.safeParse(props);
+    if (!parsed.success) {
+      throw notFound();
+    }
     return await next(props);
   };
 }

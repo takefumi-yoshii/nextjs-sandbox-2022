@@ -1,7 +1,7 @@
 import { rest } from "msw";
 import { path } from ".";
-import { Response } from "./type";
 import { data } from "./data";
+import { Response } from "./type";
 
 export const mockGetData = () =>
   rest.get<{}, {}, Response>(path(), async (_, res, ctx) => {

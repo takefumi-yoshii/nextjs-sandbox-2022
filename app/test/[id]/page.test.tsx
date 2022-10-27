@@ -1,8 +1,9 @@
-import { setupMockServer, renderSegment } from "@/mock/jest";
+import { renderSegment, setupMockServer } from "@/mock/jest";
 import { screen } from "@testing-library/react";
 import { mockGetData } from "./.api/getData/mock";
-import Page from "./page";
 import Error from "./error";
+import NotFound from "./not-found";
+import Page from "./page";
 
 setupMockServer(mockGetData());
 
@@ -16,6 +17,6 @@ test("When data fetch succeed, all contents is displayed", async () => {
 
 test("In case of bad parameters, 400 error is displayed", async () => {
   const params = { id: "-1" };
-  await renderSegment({ params, Page, Error });
-  expect(screen.getByText("message: 400")).toBeInTheDocument();
+  await renderSegment({ params, Page, Error, NotFound });
+  expect(screen.getByText("Not Found")).toBeInTheDocument();
 });

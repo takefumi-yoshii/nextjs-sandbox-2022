@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { withZod, z } from "@/utils/zod";
+import { notFound } from "next/dist/client/components/not-found";
+import Link from "next/link";
+import { getMessage } from "./.api/getMessage";
 import "./.api/msw";
 import { Component } from "./component";
-import { getMessage } from "./.api/getMessage";
 import styles from "./styles.module.css";
-import { notFound } from "next/dist/client/components/not-found";
 
 export default withZod(
   z.object({

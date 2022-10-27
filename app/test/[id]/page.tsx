@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { positiveInt, withZod, z } from "@/utils/zod";
+import Link from "next/link";
 import { getData } from "./.api/getData";
 import "./.api/msw";
 import styles from "./styles.module.css";
