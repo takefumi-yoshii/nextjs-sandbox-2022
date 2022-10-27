@@ -27,11 +27,11 @@ export async function renderSegment({
   Page: (props: {
     params?: ParsedUrlQuery;
     searchParams?: ParsedUrlQuery;
-  }) => Promise<React.ReactElement | void>;
+  }) => Promise<React.ReactElement | void> | React.ReactElement;
   Layout?: (props: {
     children: ReactNode;
     params?: ParsedUrlQuery;
-  }) => Promise<React.ReactElement>;
+  }) => Promise<React.ReactElement> | React.ReactElement;
   Loading?: () => React.ReactElement;
   NotFound?: () => React.ReactElement;
   Error?: (props: { error: Error; reset: () => void }) => React.ReactElement;
@@ -39,24 +39,23 @@ export async function renderSegment({
   const resetError = jest.fn();
   const { rerender, ...renderResult } = render(Loading ? <Loading /> : null);
   const result = { ...renderResult, resetError, rerender };
-  return Page({ params, searchParams })
-    .then(async (Element) => {
-      if (!Element) throw new Error(NOT_FOUND_ERROR_CODE);
-      if (Layout) {
-        rerender(await Layout({ params, children: Element }));
+  try {
+    const Element = await Page({ params, searchParams });
+    if (!Element) throw new Error(NOT_FOUND_ERROR_CODE);
+    if (Layout) {
+      rerender(await Layout({ params, children: Element }));
+    } else {
+      rerender(Element);
+    }
+    return result;
+  } catch (err) {
+    if (err instanceof Error && ErrorPage) {
+      if (err.message === NOT_FOUND_ERROR_CODE && NotFound) {
+        rerender(<NotFound />);
       } else {
-        rerender(Element);
+        rerender(<ErrorPage error={err} reset={resetError} />);
       }
-      return result;
-    })
-    .catch((err) => {
-      if (err instanceof Error && ErrorPage) {
-        if (err.message === NOT_FOUND_ERROR_CODE && NotFound) {
-          rerender(<NotFound />);
-        } else {
-          rerender(<ErrorPage error={err} reset={resetError} />);
-        }
-      }
-      return result;
-    });
+    }
+    return result;
+  }
 }
