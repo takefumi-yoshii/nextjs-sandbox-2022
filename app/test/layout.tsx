@@ -9,8 +9,8 @@ export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <div className={styles.module}>
       <h2>Test: {data.time}</h2>
-      <Link href={`/`}>/</Link>
       {children}
+      <Link href={`/`}>/</Link>
     </div>
   );
 }

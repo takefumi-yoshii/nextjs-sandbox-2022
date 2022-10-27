@@ -16,7 +16,9 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/mock/*": ["./mock/*"]
+      "@/utils/*": ["./utils/*"],
+      "@/mock/*": ["./mock/*"],
+      "@/components/*": ["./components/*"]
     },
     "plugins": [
       {

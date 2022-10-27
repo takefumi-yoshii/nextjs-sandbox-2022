@@ -1,5 +1,5 @@
 import { Response } from "./type";
 
-export const data = (): Response => {
-  return { message: "Hello world" };
+export const data = (injects?: Partial<Response>): Response => {
+  return { message: "Hello world", ...injects };
 };
