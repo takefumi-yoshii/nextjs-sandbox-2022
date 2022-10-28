@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import { z, ZodError, ZodSchema } from "zod";
-import { notFound } from "next/dist/client/components/not-found";
+import { z, ZodError, ZodSchema, ZodObject, ZodRawShape } from "zod";
+import { notFound } from "next/navigation";
 
 export function validate<T extends ZodSchema>(
   target: unknown,
@@ -16,14 +16,24 @@ export function validate<T extends ZodSchema>(
   }
 }
 
-export function withZod<T extends ZodSchema>(
-  schema: T,
-  next: (props: z.infer<T>) => Promise<ReactElement>
-) {
-  return async function Page(props: unknown) {
-    const parsed = schema.safeParse(props);
+export function withZod<
+  T extends { searchParams?: ZodRawShape; params?: ZodRawShape },
+  P extends {
+    searchParams: z.infer<ZodObject<NonNullable<T["searchParams"]>>>;
+    params: z.infer<ZodObject<NonNullable<T["params"]>>>;
+  }
+>(recorde: T, next: (props: P) => Promise<ReactElement>) {
+  return async function Page(props: P) {
+    const parsed = z
+      .object({
+        searchParams: z.object(
+          recorde.searchParams ? recorde.searchParams : {}
+        ),
+        params: z.object(recorde.params ? recorde.params : {}),
+      })
+      .safeParse(props);
     if (!parsed.success) {
-      throw notFound();
+      notFound();
     }
     return await next(props);
   };

@@ -1,8 +1,8 @@
+import { notFound } from "next/navigation";
 import { render } from "@testing-library/react";
 import { RequestHandler } from "msw";
 import { setupServer } from "msw/node";
 import { NOT_FOUND_ERROR_CODE } from "next/dist/client/components/not-found";
-import { ParsedUrlQuery } from "querystring";
 import { ReactNode } from "react";
 
 export function setupMockServer(...handlers: Array<RequestHandler>) {
@@ -13,24 +13,24 @@ export function setupMockServer(...handlers: Array<RequestHandler>) {
   return server;
 }
 
-export async function renderSegment({
-  params = {},
-  searchParams = {},
+export async function renderSegment<T, K>({
+  params,
+  searchParams,
   Page,
   Layout,
   Error: ErrorPage,
   Loading,
   NotFound,
 }: {
-  params?: ParsedUrlQuery;
-  searchParams?: ParsedUrlQuery;
+  params?: T;
+  searchParams?: K;
   Page: (props: {
-    params?: ParsedUrlQuery;
-    searchParams?: ParsedUrlQuery;
+    params: T;
+    searchParams: K;
   }) => Promise<React.ReactElement | void> | React.ReactElement;
   Layout?: (props: {
+    params: T;
     children: ReactNode;
-    params?: ParsedUrlQuery;
   }) => Promise<React.ReactElement> | React.ReactElement;
   Loading?: () => React.ReactElement;
   NotFound?: () => React.ReactElement;
@@ -40,10 +40,15 @@ export async function renderSegment({
   const { rerender, ...renderResult } = render(Loading ? <Loading /> : <></>);
   const result = { ...renderResult, resetError, rerender };
   try {
-    const Element = await Page({ params, searchParams });
-    if (!Element) throw new Error(NOT_FOUND_ERROR_CODE);
+    const Element = await Page({
+      params: params || ({} as T),
+      searchParams: searchParams || ({} as K),
+    });
+    if (!Element) throw notFound();
     if (Layout) {
-      rerender(await Layout({ params, children: Element }));
+      rerender(
+        await Layout({ params: params || ({} as T), children: Element })
+      );
     } else {
       rerender(Element);
     }

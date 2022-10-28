@@ -1,4 +1,4 @@
-import { renderSegment, setupMockServer } from "@/mock/jest";
+import { renderSegment, setupMockServer } from "@/utils/jest";
 import { screen } from "@testing-library/react";
 import { mockGetMessage } from "./.api/getMessage/mock";
 import { mockGetTime } from "./.api/getTime/mock";

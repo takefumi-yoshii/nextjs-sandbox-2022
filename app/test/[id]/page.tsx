@@ -1,11 +1,12 @@
 import { positiveInt, withZod, z } from "@/utils/zod";
 import Link from "next/link";
+import { ZodSchema } from "zod";
 import { getData } from "./.api/getData";
 import "./.api/msw";
 import styles from "./styles.module.css";
 
 export default withZod(
-  z.object({ params: z.object({ id: z.string().refine(...positiveInt) }) }),
+  { params: { id: z.string().refine(...positiveInt) } },
   async ({ params: { id } }) => {
     const data = await getData(id);
     return (
