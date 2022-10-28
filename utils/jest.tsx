@@ -54,10 +54,12 @@ export async function renderRoute<T, K>({
     }
     return result;
   } catch (err) {
-    if (err instanceof Error && ErrorPage) {
+    if (err instanceof Error) {
       if (err.message === NOT_FOUND_ERROR_CODE && NotFound) {
         rerender(<NotFound />);
-      } else {
+        return result;
+      }
+      if (ErrorPage) {
         rerender(<ErrorPage error={err} reset={resetError} />);
       }
     }
