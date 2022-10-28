@@ -13,7 +13,7 @@ export function setupMockServer(...handlers: Array<RequestHandler>) {
   return server;
 }
 
-export async function renderSegment<T, K>({
+export async function renderRoute<T, K>({
   params,
   searchParams,
   Page,

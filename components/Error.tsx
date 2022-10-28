@@ -1,15 +1,12 @@
 "use client";
 
-export default function ErrorComponent({
-  error,
-  reset,
-}: {
+type Props = {
   error: Error;
   reset: () => void;
-}) {
+};
+export default function ErrorComponent({ error, reset }: Props) {
   return (
     <div>
-      <p>Something went wrong!</p>
       <p>message: {error.message}</p>
       <button onClick={() => reset()}>Reset error boundary</button>
     </div>
