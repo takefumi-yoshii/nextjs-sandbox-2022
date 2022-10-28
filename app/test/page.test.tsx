@@ -10,7 +10,7 @@ import Page from "./page";
 const server = setupMockServer(mockGetMessage(), mockGetTime());
 const segment = { Layout, Page, NotFound, Error };
 
-test("When data fetch succeed, all contents is displayed", async () => {
+test("When data fetch succeed, All contents will be display", async () => {
   const searchParams = { greet: "Hi" };
   await renderSegment({ ...segment, searchParams });
   expect(screen.getByText(searchParams.greet)).toBeInTheDocument();
@@ -19,14 +19,24 @@ test("When data fetch succeed, all contents is displayed", async () => {
   expect(screen.getByRole("link", { name: "/" })).toBeInTheDocument();
 });
 
-test("When data fetch fails, an error message is displayed", async () => {
-  server.use(mockGetMessage(500));
-  await renderSegment(segment);
+test("API Client have been called with searchParams", async () => {
+  const mock = jest.fn();
+  server.use(mockGetMessage({ mock }));
+  const searchParams = { greet: "Hi" };
+  await renderSegment({ ...segment, searchParams });
+  expect(mock).toHaveBeenCalledWith({ searchParams });
+});
+
+test("When data fetch failed, An error message will be display", async () => {
+  server.use(mockGetMessage({ status: 500 }));
+  await renderSegment({ ...segment });
   expect(screen.getByText("message: 500")).toBeInTheDocument();
 });
 
-test("NotFound is displayed when the message is empty", async () => {
-  server.use(mockGetMessage(200, { message: "" }));
-  await renderSegment(segment);
+test("When response message is empty, NotFound will be display", async () => {
+  const mock = jest.fn();
+  server.use(mockGetMessage({ status: 200, stub: { message: "" }, mock }));
+  await renderSegment({ ...segment });
+  expect(mock).toHaveBeenCalled();
   expect(screen.getByText("Not Found")).toBeInTheDocument();
 });

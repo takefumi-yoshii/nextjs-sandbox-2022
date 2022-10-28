@@ -7,13 +7,12 @@ import Loading from "./loading";
 import NotFound from "./not-found";
 import Page from "./page";
 
-setupMockServer(mockGetData());
+const server = setupMockServer(mockGetData());
 const params = { id: "123" };
 const segment = { params, Layout, Page, Loading, NotFound, Error };
 
 test("When data fetch succeed, all contents is displayed", async () => {
-  expect.assertions(2);
-  const promise = renderSegment(segment);
+  const promise = renderSegment({ ...segment });
   expect(screen.getByText("Loading...")).toBeInTheDocument();
   await promise;
   expect(
@@ -22,9 +21,15 @@ test("When data fetch succeed, all contents is displayed", async () => {
 });
 
 test("In case of bad parameters, Not Found error is displayed", async () => {
-  expect.assertions(2);
-  const promise = renderSegment({ ...segment, params: { id: "-1" } });
+  const params = { id: "-1" };
+  const promise = renderSegment({ ...segment, params });
   expect(screen.getByText("Loading...")).toBeInTheDocument();
   await promise;
   expect(screen.getByText("Not Found")).toBeInTheDocument();
+});
+
+test("When data fetch failed, An error message will be display", async () => {
+  server.use(mockGetData({ status: 500 }));
+  await renderSegment({ ...segment });
+  expect(screen.getByText("message: 500")).toBeInTheDocument();
 });

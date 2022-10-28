@@ -11,7 +11,7 @@ export default withZod(
     searchParams: z.object({ greet: z.string().optional() }),
   }),
   async ({ searchParams }) => {
-    const data = await getMessage();
+    const data = await getMessage(searchParams);
     if (!data.message) throw notFound();
     return (
       <div className={styles.module}>

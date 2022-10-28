@@ -7,7 +7,7 @@ export default async function Page() {
   return (
     <div>
       <h1>Hello, Next.js!</h1>
-      <p>{data.message}</p>
+      <p>{data.time}</p>
       <Link href="/test">down</Link>
     </div>
   );

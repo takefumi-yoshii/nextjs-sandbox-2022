@@ -30,7 +30,7 @@ export function withZod<T extends ZodSchema>(
 }
 
 export const positiveInt = [
-  (v) => Number.isInteger(+v) && +v > 0,
+  (v: string) => Number.isInteger(+v) && +v > 0,
   "Require positive int.",
 ] as const;
 

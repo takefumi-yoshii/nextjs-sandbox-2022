@@ -1,10 +1,11 @@
 import { Response } from "./type";
+import qs from "qs";
+import { handleJsonResponse } from "@/utils/fetch";
 
 export const path = () => `https://api.example.com/message`;
 
-export const getMessage = async () => {
-  const res = await fetch(path(), { cache: "no-store" });
-  if (!res.ok) throw new Error(`${res.status}`);
-  const data: Response = await res.json();
-  return data;
+export const getMessage = async (args?: { greet?: string }) => {
+  const q = qs.stringify(args);
+  const res = await fetch(q ? `${path()}?${q}` : path(), { cache: "no-store" });
+  return await handleJsonResponse<Response>(res);
 };

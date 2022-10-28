@@ -37,7 +37,7 @@ export async function renderSegment({
   Error?: (props: { error: Error; reset: () => void }) => React.ReactElement;
 }) {
   const resetError = jest.fn();
-  const { rerender, ...renderResult } = render(Loading ? <Loading /> : null);
+  const { rerender, ...renderResult } = render(Loading ? <Loading /> : <></>);
   const result = { ...renderResult, resetError, rerender };
   try {
     const Element = await Page({ params, searchParams });
