@@ -11,6 +11,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
+    "@typescript-eslint/ban-types": "off",
     "import/order": [
       "warn",
       {

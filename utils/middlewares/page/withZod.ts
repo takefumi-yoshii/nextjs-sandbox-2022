@@ -1,5 +1,5 @@
-import { z, ZodSchema } from "zod";
 import { notFound } from "next/navigation";
+import { z, ZodSchema } from "zod";
 
 type DefaultProps<T = {}, U = {}> = { params: T; searchParams: U };
 
