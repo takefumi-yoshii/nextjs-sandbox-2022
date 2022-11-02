@@ -1,4 +1,3 @@
-import { renderRoute, setupMockServer } from "@/utils/jest";
 import { screen } from "@testing-library/react";
 import { mockGetMessage } from "./.api/getMessage/mock";
 import { mockGetTime } from "./.api/getTime/mock";
@@ -6,6 +5,7 @@ import Error from "./error";
 import Layout from "./layout";
 import NotFound from "./not-found";
 import Page from "./page";
+import { renderRoute, setupMockServer } from "@/utils/jest";
 
 const server = setupMockServer(mockGetMessage(), mockGetTime());
 const files = { Layout, Page, NotFound, Error };

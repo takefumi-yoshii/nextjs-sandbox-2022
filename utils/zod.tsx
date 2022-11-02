@@ -1,6 +1,4 @@
-import { ReactElement } from "react";
-import { z, ZodError, ZodSchema, ZodObject, ZodRawShape } from "zod";
-import { notFound } from "next/navigation";
+import { z, ZodError, ZodSchema } from "zod";
 
 export function validate<T extends ZodSchema>(
   target: unknown,
@@ -16,32 +14,14 @@ export function validate<T extends ZodSchema>(
   }
 }
 
-export function withZod<
-  T extends { searchParams?: ZodRawShape; params?: ZodRawShape },
-  P extends {
-    searchParams: z.infer<ZodObject<NonNullable<T["searchParams"]>>>;
-    params: z.infer<ZodObject<NonNullable<T["params"]>>>;
-  }
->(recorde: T, next: (props: P) => Promise<ReactElement>) {
-  return async function Page(props: P) {
-    const parsed = z
-      .object({
-        searchParams: z.object(
-          recorde.searchParams ? recorde.searchParams : {}
-        ),
-        params: z.object(recorde.params ? recorde.params : {}),
-      })
-      .safeParse(props);
-    if (!parsed.success) {
-      notFound();
-    }
-    return await next(props);
-  };
-}
-
 export const positiveInt = [
   (v: string) => Number.isInteger(+v) && +v > 0,
   "Require positive int.",
 ] as const;
+
+export const stringAsPositiveInt = z
+  .string()
+  .refine(...positiveInt)
+  .transform((v) => +v);
 
 export { z };
